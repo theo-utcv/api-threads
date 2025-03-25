@@ -1,9 +1,17 @@
 const Usuario = require('../models/userModel');
+const cloudinary = require('../config/cloudinaryConfig');
 
 // Crear un nuevo usuario
 exports.crearUsuario = async (req, res) => {
     try {
-        const nuevoUsuario = new Usuario(req.body);
+        // Cargar la imagen a Cloudinary
+        const result = await cloudinary.uploader.upload(req.file.path);
+
+        const nuevoUsuario = new Usuario({
+            ...req.body,
+            foto_perfil: result.secure_url // Guardar la URL de la imagen en la base de datos
+        });
+
         await nuevoUsuario.save();
         res.status(201).json(nuevoUsuario);
     } catch (error) {
