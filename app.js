@@ -4,6 +4,7 @@ const connectDB = require('./config/db');
 const userRoutes = require("./routes/userRouter");
 const authRoutes = require('./routes/authRouter');
 const postRoutes = require("./routes/postRouter");
+const commentRoutes = require("./routes/commentRouter");
 const swaggerJsDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 
@@ -48,6 +49,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 app.use('/api', userRoutes);
 app.use('/api', postRoutes);
 app.use('/auth', authRoutes);
+app.use('/api', commentRoutes);
 
 // Middleware de manejo de errores
 app.use((err, req, res, next) => {
