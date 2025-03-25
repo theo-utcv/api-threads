@@ -15,9 +15,11 @@ const storage = new CloudinaryStorage({
 
 const upload = multer({ storage: storage });
 
-
+// Rutas de usuario
 router.post('/usuarios', upload.single('foto_perfil'), usuarioController.crearUsuario);
 router.get('/usuarios', usuarioController.obtenerUsuarios);
 router.get('/usuarios/:id', usuarioController.obtenerUsuarioPorId);
+router.put('/usuarios/:id', upload.single('foto_perfil'), usuarioController.actualizarUsuario); // Ruta para actualizar
+router.delete('/usuarios/:id', usuarioController.eliminarUsuario); // Ruta para eliminar
 
 module.exports = router;

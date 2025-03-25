@@ -41,3 +41,37 @@ exports.obtenerUsuarioPorId = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
+// Actualizar un usuario
+exports.actualizarUsuario = async (req, res) => {
+    try {
+        const updates = { ...req.body };
+
+        // Si se proporciona una nueva foto, cargarla a Cloudinary
+        if (req.file) {
+            const result = await cloudinary.uploader.upload(req.file.path);
+            updates.foto_perfil = result.secure_url; // Actualizar la URL de la imagen
+        }
+
+        const usuarioActualizado = await Usuario.findByIdAndUpdate(req.params.id, updates, { new: true });
+        if (!usuarioActualizado) {
+            return res.status(404).json({ message: 'Usuario no encontrado' });
+        }
+        res.status(200).json(usuarioActualizado);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+};
+
+// Eliminar un usuario
+exports.eliminarUsuario = async (req, res) => {
+    try {
+        const usuarioEliminado = await Usuario.findByIdAndDelete(req.params.id);
+        if (!usuarioEliminado) {
+            return res.status(404).json({ message: 'Usuario no encontrado' });
+        }
+        res.status(200).json({ message: 'Usuario eliminado correctamente' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
